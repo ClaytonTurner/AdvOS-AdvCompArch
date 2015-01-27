@@ -25,3 +25,18 @@
  remainder, you can only use the open(), write(), read(), and close()
  I/O system calls.
 */
+
+int myread(char* file_name, v_struct** p_vec_array_ptr){
+	
+	return 0;
+}
+
+double x_component(v_struct* p_vector){
+
+	return 0.0;
+}
+
+double y_component(v_struct* p_vector){
+
+	return 0.0;
+}
