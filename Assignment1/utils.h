@@ -83,3 +83,4 @@ double x_component(v_struct* p_vector);
  Return: 	double that represents y component value
 */
 double y_component(v_struct* p_vector);
+int fileLineCount(char* file_name);

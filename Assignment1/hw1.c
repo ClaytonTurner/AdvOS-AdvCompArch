@@ -9,6 +9,7 @@
 
 #include "utils.h"	// your own functions
 
+#include <stdio.h>	// delete this; debugging only
 /*
  Main function 
  Arguments:	argc = number of arguments suppled by user
@@ -16,6 +17,7 @@
 */
 
 int main( int argc, char** argv ) {
+	int vectorsLineCount;
   /*
    Steps to be performed
    	1. Define variables (including arrays)
@@ -34,8 +36,8 @@ int main( int argc, char** argv ) {
 	     For example:
 		r = 10.00, theta = 180.00 degrees, theta = 3.14 radians, x_comp = -10.00, y_comp = 0.00 
   */
-
-	
-  return 0;
+	vectorsLineCount = fileLineCount("vectors.txt");
+	printf("%d\n",vectorsLineCount);
+	return 0;
 
 } // end main() function
