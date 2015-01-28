@@ -67,7 +67,7 @@ int fileLineCount(char* file_name){
 int myread(char* file_name, v_struct** p_vec_array_ptr){
 	int vectorsLineCount = fileLineCount(file_name);
 	int charCount = fileCharCount(file_name);
-	v_struct *p_vec_array = (v_struct*)malloc(vectorsLineCount*sizeof(v_struct));
+	v_struct* p_vec_array = (v_struct*)malloc(vectorsLineCount*sizeof(v_struct));
 	int i;
 	char c;
 	char line[charCount];//can assume line is not longer than 100 chars
@@ -76,41 +76,45 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 	char* temp;
 	double temp_r;
 	double temp_theta;
+	int segfault_runoff = 1;
 	// open the file
 	int fd = open(file_name, O_RDONLY);
 	if(fd < 0){
 		write(2,"Error opening file\n",19);
 		return -1;
 	}	
-
-	for(i = 0; i < vectorsLineCount; i++){
-		while(read(fd,&c,1) > 0){
-			line[lineIndex] = c;
-			if(boolean == 1){
-				boolean = 0;
-				temp = &line[lineIndex];
-			}
-			//printf("%c\n",line[lineIndex]);
-			if(c == ','){
-				line[lineIndex] = '\0';
-				temp_r = atof(temp);
-				temp = &line[lineIndex+1];
-			}
-			if(c == '\n'){
-				line[lineIndex] = '\0';
-				temp_theta = atof(temp);
-				printf("%.2f,%.2f\n",temp_r,temp_theta);
-				boolean = 1;
-				temp = NULL;
-				lineIndex = 0;
-			}
-			lineIndex++;
-		}
-		lineIndex = 0;
-
-	}
 	
-	free(p_vec_array);
+	for(i = 0; i < charCount; i++){
+		read(fd,&c,1);
+		line[lineIndex] = c;
+		if(boolean == 1){
+			boolean = 0;
+			temp = &line[lineIndex];
+		}
+		//printf("%c\n",line[lineIndex]);
+		if(c == ','){
+			line[lineIndex] = '\0';
+			temp_r = atof(temp);
+			temp = &line[lineIndex+1];
+		}
+		if(c == '\n'){
+			line[lineIndex] = '\0';
+			temp_theta = atof(temp);
+			printf("%.2f,%.2f\n",temp_r,temp_theta);
+			p_vec_array->r = temp_r;
+			p_vec_array->theta = temp_theta;
+			boolean = 1;
+			temp = NULL;
+			lineIndex = 0;
+			printf("test: %f\n",p_vec_array->r);
+			segfault_runoff++;
+			if(segfault_runoff < vectorsLineCount)
+				p_vec_array++;
+		}
+		lineIndex++;
+	}
+	p_vec_array_ptr = &p_vec_array;
+	//free(p_vec_array);
 	// close the file
 	close(fd);
 	/*if(closeFile < 0){
