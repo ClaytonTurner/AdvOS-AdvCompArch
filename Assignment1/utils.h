@@ -84,3 +84,4 @@ double x_component(v_struct* p_vector);
 */
 double y_component(v_struct* p_vector);
 int fileLineCount(char* file_name);
+int fileCharCount(char* file_name);

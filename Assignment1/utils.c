@@ -26,6 +26,22 @@
  remainder, you can only use the open(), write(), read(), and close()
  I/O system calls.
 */
+int fileCharCount(char* file_name){
+	int n = 0; // counts number of chars
+	char c;
+	int filedesc = open(file_name, O_RDONLY);
+
+	if(filedesc < 0) {
+		write(2,"Error opening file\n",19);
+		return -1; 
+	}
+	while(read(filedesc,&c,1) > 0){
+		n++;
+	}
+	close(filedesc);
+	return n;
+}
+
 
 int fileLineCount(char* file_name){
 	int n = 0; // counts number of lines
@@ -50,10 +66,11 @@ int fileLineCount(char* file_name){
 
 int myread(char* file_name, v_struct** p_vec_array_ptr){
 	int vectorsLineCount = fileLineCount(file_name);
+	int charCount = fileCharCount(file_name);
 	v_struct *p_vec_array = (v_struct*)malloc(vectorsLineCount*sizeof(v_struct));
 	int i;
 	char c;
-	char line[100];//can assume line is not longer than 100 chars
+	char line[charCount];//can assume line is not longer than 100 chars
 	int lineIndex;
 	int boolean = 1;
 	char* temp;
