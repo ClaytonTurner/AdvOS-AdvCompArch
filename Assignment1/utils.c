@@ -29,7 +29,6 @@
 
 int fileLineCount(char* file_name){
 	int n = 0; // counts number of lines
-	int closeFile;
 	char c; // checks for new lines
 	int filedesc = open(file_name, O_RDONLY);
 
@@ -41,11 +40,11 @@ int fileLineCount(char* file_name){
 		if(c == '\n')
 			n++;// set up so no off-by-1 and no extra incrementing needed
 	}
-	closeFile = close(filedesc);
-	if(closeFile<0){
+	close(filedesc);
+	/*if(closeFile<0){
 		write(2,"Error closing file\n",19);
 		return -1;
-	}	
+	}*/	
 	return n;
 }
 
@@ -56,7 +55,6 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 	char c;
 	char line[100];//can assume line is not longer than 100 chars
 	int lineIndex;
-	int closeFile;
 	int boolean = 1;
 	char* temp;
 	double temp_r;
@@ -70,24 +68,24 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 
 	for(i = 0; i < vectorsLineCount; i++){
 		while(read(fd,&c,1) > 0){
+			line[lineIndex] = c;
 			if(boolean == 1){
 				boolean = 0;
 				temp = &line[lineIndex];
 			}
-			line[lineIndex] = c;
 			//printf("%c\n",line[lineIndex]);
 			if(c == ','){
 				line[lineIndex] = '\0';
 				temp_r = atof(temp);
 				temp = &line[lineIndex+1];
-				//temp_theta = atof(temp);
-				//printf("%.2f,%.2f\n",temp_r,temp_theta);
 			}
 			if(c == '\n'){
+				line[lineIndex] = '\0';
 				temp_theta = atof(temp);
 				printf("%.2f,%.2f\n",temp_r,temp_theta);
 				boolean = 1;
 				temp = NULL;
+				lineIndex = 0;
 			}
 			lineIndex++;
 		}
@@ -97,13 +95,12 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 	
 	free(p_vec_array);
 	// close the file
-	closeFile = close(fd);
-	//printf("closeFile int: %d %d %d\n",fd,closeFile,errno);
-	if(closeFile < 0){
+	close(fd);
+	/*if(closeFile < 0){
 		write(2,"Error closing file\n",19);
 		printf("Continuing since this is a bug\n");
 		//return -1;
-	}
+	}*/
 	return 0;
 }
 
