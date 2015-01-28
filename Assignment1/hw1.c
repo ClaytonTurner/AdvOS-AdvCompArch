@@ -17,7 +17,9 @@
 */
 
 int main( int argc, char** argv ) {
-	int vectorsLineCount;
+	char* filename = argv[1];
+	int read;
+	v_struct** p_vec_array_ptr;
   /*
    Steps to be performed
    	1. Define variables (including arrays)
@@ -36,8 +38,7 @@ int main( int argc, char** argv ) {
 	     For example:
 		r = 10.00, theta = 180.00 degrees, theta = 3.14 radians, x_comp = -10.00, y_comp = 0.00 
   */
-	vectorsLineCount = fileLineCount("vectors.txt");
-	printf("%d\n",vectorsLineCount);
+	read = myread(filename,p_vec_array_ptr);
 	return 0;
 
 } // end main() function
