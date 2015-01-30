@@ -57,33 +57,39 @@ int fileLineCount(char* file_name){
 			n++;// set up so no off-by-1 and no extra incrementing needed
 	}
 	close(filedesc);
-	/*if(closeFile<0){
-		write(2,"Error closing file\n",19);
-		return -1;
-	}*/	
 	return n;
+}
+
+int strlen(char* str){
+  int n = 0;
+  while(str != '\0')
+    n++;
+  return n;
 }
 
 int myread(char* file_name, v_struct** p_vec_array_ptr){
 	int vectorsLineCount = fileLineCount(file_name);
 	int charCount = fileCharCount(file_name);
-	v_struct* p_vec_array = (v_struct*)malloc(vectorsLineCount*sizeof(v_struct));
-	int i;
+  //*p_vec_array_ptr = (v_struct*)malloc(vectorsLineCount*sizeof(v_struct));
+  v_struct *p_vec_array = (v_struct*)malloc(vectorsLineCount*sizeof(v_struct));
+  int i;
 	char c;
 	char line[charCount];//can assume line is not longer than 100 chars
-	int lineIndex;
+	int lineIndex = 0;
 	int boolean = 1;
 	char* temp;
 	double temp_r;
 	double temp_theta;
 	int segfault_runoff = 1;
+  double x_comp;
+  double y_comp;
 	// open the file
 	int fd = open(file_name, O_RDONLY);
 	if(fd < 0){
 		write(2,"Error opening file\n",19);
 		return -1;
 	}	
-	
+  	
 	for(i = 0; i < charCount; i++){
 		read(fd,&c,1);
 		line[lineIndex] = c;
@@ -91,7 +97,6 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 			boolean = 0;
 			temp = &line[lineIndex];
 		}
-		//printf("%c\n",line[lineIndex]);
 		if(c == ','){
 			line[lineIndex] = '\0';
 			temp_r = atof(temp);
@@ -100,37 +105,36 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 		if(c == '\n'){
 			line[lineIndex] = '\0';
 			temp_theta = atof(temp);
+      if(temp_theta > 360)
+        temp_theta = temp_theta - 360; // dont have to worry about other cases
 			printf("%.2f,%.2f\n",temp_r,temp_theta);
 			p_vec_array->r = temp_r;
 			p_vec_array->theta = temp_theta;
+      temp_theta = p_vec_array->theta*PI/180;
+      x_comp = x_component(p_vec_array);
+      y_comp = y_component(p_vec_array);
+      printf("r = %.2f theta = %.2f degrees theta = %.2f radians x_comp = %.2f y_comp = %.2f\n",p_vec_array->r, p_vec_array->theta,temp_theta,x_comp,y_comp);
 			boolean = 1;
 			temp = NULL;
 			lineIndex = 0;
-			printf("test: %f\n",p_vec_array->r);
 			segfault_runoff++;
 			if(segfault_runoff < vectorsLineCount)
-				p_vec_array++;
+				p_vec_array_ptr++;
 		}
 		lineIndex++;
 	}
-	p_vec_array_ptr = &p_vec_array;
-	//free(p_vec_array);
+	free(p_vec_array);
 	// close the file
 	close(fd);
-	/*if(closeFile < 0){
-		write(2,"Error closing file\n",19);
-		printf("Continuing since this is a bug\n");
-		//return -1;
-	}*/
 	return 0;
 }
 
 double x_component(v_struct* p_vector){
-
-	return 0.0;
+  double x = p_vector->r*cos(p_vector->theta);
+	return x;
 }
 
 double y_component(v_struct* p_vector){
-
-	return 0.0;
+  double y = p_vector->r*sin(p_vector->theta);
+	return y;
 }
