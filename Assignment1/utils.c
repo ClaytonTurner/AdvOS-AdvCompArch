@@ -77,6 +77,7 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 	double temp_r;
 	double temp_theta;
 	int segfault_runoff = 1;
+	v_struct* p_vec_array_original = p_vec_array;
 	// open the file
 	int fd = open(file_name, O_RDONLY);
 	if(fd < 0){
@@ -113,7 +114,7 @@ int myread(char* file_name, v_struct** p_vec_array_ptr){
 		}
 		lineIndex++;
 	}
-	p_vec_array_ptr = &p_vec_array;
+	p_vec_array_ptr = &p_vec_array_original;
 	//free(p_vec_array);
 	// close the file
 	close(fd);

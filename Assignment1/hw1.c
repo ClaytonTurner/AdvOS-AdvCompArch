@@ -17,7 +17,8 @@
 */
 
 int main( int argc, char** argv ) {
-	char* filename = argv[1];
+	//char* filename = argv[1];
+	char* filename = 'vectors.txt';//temporary fix for windows
 	int read;
 	v_struct** p_vec_array_ptr;
   /*
