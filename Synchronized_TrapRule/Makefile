@@ -1,7 +1,7 @@
 CC=gcc
-FLAGS=-lpthread
+FLAGS=-lpthread -lm -Wall
 
-Makefile: synchronized_traprule.c
+Makefile: synchronized_traprule.c 
 	$(CC) -o synchronized_traprule synchronized_traprule.c $(FLAGS)
 
 clean:

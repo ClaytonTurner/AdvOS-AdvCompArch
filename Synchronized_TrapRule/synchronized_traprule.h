@@ -1,3 +1,5 @@
-void *auc_slice(int thread_index);
+void *controller();
 
-float trap_area(int length,int width,int traingle_height);
+void *auc_slice(void *ptr);
+
+float trap_area(float length,float width,float traingle_height);
