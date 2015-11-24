@@ -1,6 +1,13 @@
 #include <math.h>
 #include <emmintrin.h>
 
+__m128d c_swap(__m128d x, __m128d cond)
+{
+	__m128d t = _mm_xor_pd((__m128d)_mm_shuffle_epi32((__m128i) x, 0x4e), x);
+	cond = _mm_and_pd(cond, t);
+	return _mm_xor_pd(cond, x);
+}
+
 __m128d in2_mul8(__m128d x, __m128d y)
 {
 	__m128d t1 = (__m128d)_mm_shuffle_epi32((__m128i) x, 0xee);
@@ -8,7 +15,7 @@ __m128d in2_mul8(__m128d x, __m128d y)
 			
 	__m128d t3 = _mm_xor_pd(x, t1);
 	__m128d t4 = _mm_xor_pd(y, t2);
-					
+
 	if (_mm_movemask_pd(_mm_and_pd(t3, t4)))
 	{
 		__m128d c = {0.0, 0.0};

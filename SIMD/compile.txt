@@ -1,0 +1,1 @@
+gcc -lm -msse -msse2 -msse3 -mfpmath=sse intrinsics.c
